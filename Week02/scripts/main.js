@@ -25,13 +25,14 @@ $(function() {
     // save project button clicked
     $("#btnGoCreate").click(function() {
         $('btnSave').text('Create');
-
-        $('form').submit();
     });
 
     // create / save project clicked
     $('#btnSave').click(function() {
         saveProject();
+
+        $('form').submit();
+        return false;
     });
 
 });
