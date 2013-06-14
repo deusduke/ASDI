@@ -37,6 +37,7 @@ li_expanded = " \
 <p>{4}</p> \
 <a href='#' class='edit_link'>Edit</a> \
 <a href='#' class='close_link'>Close</a> \
+<a href='#' class='delete_link'>Delete</a> \
 ";
 
 // initialize home
@@ -65,6 +66,7 @@ $(document).on('pageinit', '#pgHome', function(){
             li.html(newdom);
 
             $('.close_link').click(closeLinkClicked);
+            $('.delete_link').click(deleteLinkClicked);
         }
 
         return false;
@@ -188,6 +190,17 @@ function closeLinkClicked() {
         var p = getProject(li.attr('data-project-id'));
         li.html('<p>' + p.name + '</p>');
     }
+
+    return false;
+}
+
+function deleteLinkClicked() {
+    var li = $(this).parent();
+
+    deleteProject(li.attr('data-project-id'));
+    li.remove();
+
+    $('#main_list').listview('refresh');
 
     return false;
 }
