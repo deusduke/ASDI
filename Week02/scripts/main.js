@@ -4,19 +4,81 @@
  * Week 02
  */
 
+// utility function to create formatted string similar to .Net
+String.prototype.format = function() {
+    str = this;
+    var oldStr = "";
+
+    for (var i in arguments) {
+        // loop so that we can support multiple same numbers
+        do{
+            oldStr = str;
+            str = str.replace('{' + i.toString() + '}', arguments[i]);
+
+        } while (str != oldStr);
+        ++i;
+    }
+
+    return str;
+};
+
 var jsonLoaded = false;
 var yamlLoaded = false;
 var createMode = false;
 
-lihtml = "<li class='' data-project-id='{0}'>{1}</li>";
+lihtml = "<li class='project_li' data-project-id='{0}'><p>{1}</p></li>";
+
+// this is used to expand the list view on click
+li_expanded = " \
+<p>{0}</p> \
+<p>{1}</p> \
+<p>{2}</p> \
+<p>{3}</p> \
+<p>{4}</p> \
+<a href='#' class='edit_link'>Edit</a> \
+<a href='#' class='close_link'>Close</a> \
+";
+
+// initialize home
+$(document).on('pageinit', '#pgHome', function(){
+    var projects = getAllProjects();
+    var ul = $('#main_list');
+
+    // loop over projects and add elements
+    for(var i in projects) {
+        p = projects[i];
+
+        ul.append(lihtml.format(p.id, p.name));
+    }
+
+    ul.listview('refresh');
+
+    // expand list item on click
+    $('.project_li').click(function(){
+        var li = $(this);
+
+        // make sure we are not expanded
+        if (!li.hasClass('expand')) {
+            li.addClass('expand');
+            var p = getProject(li.attr('data-project-id'));
+            var newdom = $(li_expanded.format(p.name, p.description, p.start_date, p.end_date, p.priority));
+            li.html(newdom);
+
+            $('.close_link').click(closeLinkClicked);
+        }
+
+        return false;
+    });
+
+    // handle the clicking of the edit a for
+    // editing a project
+    $('.edit_link').click(function() {
+        return false;
+    });
+});
 
 // document ready shortcut
 $(function() {
-
-	// initialize home
-    $('#pgHome').on('pageinit', function(){
-        
-    });
 
     // initialze create
     $('#pgCreate').on('pageinit', function(){
@@ -32,9 +94,7 @@ $(function() {
         saveProject();
 
         $('form').submit();
-        return false;
     });
-
 });
 
 /**
@@ -91,7 +151,7 @@ function getProject(projectid) {
 }
 
 /**
- * Retrieve all the project from local storage
+ * Retrieve all the projects from local storage
  * @return {array} returns an array of project objects
  */
 function getAllProjects() {
@@ -115,4 +175,19 @@ function getAllProjects() {
  */
 function deleteProject(projectid) {
     localStorage.removeItem(projectid);
+}
+
+function closeLinkClicked() {
+    var li = $(this).parent();
+
+    // make sure that we are expanded
+    if (li.hasClass('expand')) {
+        li.removeClass('expand');
+
+        // get project and set li html back to text
+        var p = getProject(li.attr('data-project-id'));
+        li.html('<p>' + p.name + '</p>');
+    }
+
+    return false;
 }
