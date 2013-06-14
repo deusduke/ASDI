@@ -42,35 +42,7 @@ li_expanded = " \
 
 // initialize home
 $(document).on('pageinit', '#pgHome', function(){
-    var projects = getAllProjects();
-    var ul = $('#main_list');
-
-    // loop over projects and add elements
-    for(var i in projects) {
-        p = projects[i];
-
-        ul.append(lihtml.format(p.id, p.name));
-    }
-
-    ul.listview('refresh');
-
-    // expand list item on click
-    $('.project_li').click(function(){
-        var li = $(this);
-
-        // make sure we are not expanded
-        if (!li.hasClass('expand')) {
-            li.addClass('expand');
-            var p = getProject(li.attr('data-project-id'));
-            var newdom = $(li_expanded.format(p.name, p.description, p.start_date, p.end_date, p.priority));
-            li.html(newdom);
-
-            $('.close_link').click(closeLinkClicked);
-            $('.delete_link').click(deleteLinkClicked);
-        }
-
-        return false;
-    });
+    resetProjectList();
 
     // handle the clicking of the edit a for
     // editing a project
@@ -206,11 +178,76 @@ function deleteLinkClicked() {
 }
 
 function loadJSON() {
-    $.getJSON('data/projects.json', function(data) {
+    $.getJSON('data/projects.json', function() {
+    })
+    .done(function(data){
         console.log(data);
+        for (var i in data) {
+            var p = data[i];
+            localStorage.setItem(p.id, JSON.stringify(p));
+        }
+
+        resetProjectList();
+    })
+    .fail(function(jqXHR, textStatus){
+        console.log(jqXHR);
+        console.log(textStatus);
+        console.log('could not load data');
     });
 }
 
 function loadYAML() {
-    console.log('working');
+    $.ajax({
+        url: 'data/projects.yaml',
+        dataType: 'text'
+    })
+    .done(function(data){
+        console.log(data);
+        projects = jsyaml.load(data);
+
+        for (var i in projects) {
+            var p = projects[i];
+            localStorage.setItem(p.id, JSON.stringify(p));
+        }
+
+        resetProjectList();
+    })
+    .fail(function(jqXHR, textStatus){
+        console.log(jqXHR);
+        console.log(textStatus);
+        console.log('could not load data');
+    });
+}
+
+function resetProjectList() {
+    var projects = getAllProjects();
+    var ul = $('#main_list');
+    ul.html('');
+
+    // loop over projects and add elements
+    for(var i in projects) {
+        p = projects[i];
+
+        ul.append(lihtml.format(p.id, p.name));
+    }
+
+    // expand list item on click
+    $('.project_li').click(function(){
+        var li = $(this);
+
+        // make sure we are not expanded
+        if (!li.hasClass('expand')) {
+            li.addClass('expand');
+            var p = getProject(li.attr('data-project-id'));
+            var newdom = $(li_expanded.format(p.name, p.description, p.start_date, p.end_date, p.priority));
+            li.html(newdom);
+
+            $('.close_link').click(closeLinkClicked);
+            $('.delete_link').click(deleteLinkClicked);
+        }
+
+        return false;
+    });
+
+    ul.listview('refresh');
 }
