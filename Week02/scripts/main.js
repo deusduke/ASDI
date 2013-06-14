@@ -204,3 +204,13 @@ function deleteLinkClicked() {
 
     return false;
 }
+
+function loadJSON() {
+    $.getJSON('data/projects.json', function(data) {
+        console.log(data);
+    });
+}
+
+function loadYAML() {
+    console.log('working');
+}
