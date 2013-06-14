@@ -4,6 +4,8 @@
  * Week 02
  */
 
+var currentProject = null;
+
 // utility function to create formatted string similar to .Net
 String.prototype.format = function() {
     str = this;
@@ -54,8 +56,9 @@ $(document).on('pageinit', '#pgHome', function(){
 $(document).on('pageinit', '#pgCreate', function() {
     // create / save project clicked
     $('#btnSave').click(function() {
-        saveProject();
+        saveProject(currentProject);
 
+        resetProjectList();
         $('form').submit();
     });
 });
@@ -64,7 +67,10 @@ $(document).on('pageinit', '#pgCreate', function() {
 $(function() {
     // save project button clicked
     $("#btnGoCreate").click(function() {
+        currentProject = null;
         $('btnSave').text('Create');
+
+        clearForm();
     });
 });
 
@@ -96,20 +102,14 @@ function saveProject(projectid) {
     else
         p.id = Date.now().getTime();    // create id based off timestamp for guaranteed uniqueness
 
-    if (!projectid) {
-        // get vars
-        p.name = $('#name').val();
-        p.start_date = $('#start_date').val();
-        p.end_date = $('#end_date').val();
-        p.priority = $('#priority').val();
-        p.description = $('#description').val();
+    // get vars
+    p.name = $('#name').val();
+    p.start_date = $('#start_date').val();
+    p.end_date = $('#end_date').val();
+    p.priority = $('#priority').val();
+    p.description = $('#description').val();
 
-        localStorage.setItem(p.id, JSON.stringify(p));
-    }
-
-    else {
-        // TODO
-    }
+    localStorage.setItem(p.id, JSON.stringify(p));
 }
 
 /**
@@ -174,6 +174,30 @@ function deleteLinkClicked() {
     li.remove();
 
     $('#main_list').listview('refresh');
+
+    return false;
+}
+
+/**
+ * Edit the project
+ * @return {void} 
+ */
+function editLinkClicked() {
+    var li = $(this).parent();
+
+    currentProject = li.attr('data-project-id');
+
+    // set fields
+    project = getProject(currentProject);
+
+    $('#name').val(p.name);
+    $('#start_date').val(p.start_date);
+    $('#end_date').val(p.end_date);
+    $('#priority').val(p.priority);
+    $('#description').val(p.description);
+
+    $('#btnSave').text('Save');
+    $.mobile.changePage('#pgCreate');
 
     return false;
 }
@@ -257,10 +281,25 @@ function resetProjectList() {
 
             $('.close_link').click(closeLinkClicked);
             $('.delete_link').click(deleteLinkClicked);
+            $('.edit_link').click(editLinkClicked);
         }
 
         return false;
     });
 
     ul.listview('refresh');
+}
+
+/**
+ * Clear all the form fields
+ * @return {void} 
+ */
+function clearForm() {
+    $('#name').val('');
+    $('#start_date').val('');
+    $('#end_date').val('');
+    $('#priority').val('');
+    $('#description').val('');
+
+    $('#btnSave').text('Save');
 }

@@ -1,34 +1,34 @@
 - id: 68046508406151
   name: YAML Cool Game
-  start_date: 2013-03-25
-  end_date: 2013-03-25
+  start_date: '2013-03-25'
+  end_date: '2013-03-25'
   priority: 5
   description: This is a dummy project for testing purposes, remove before release to the live server
 
 - id: 27458578325782758
   name: YAML Cool Test
-  start_date: 2013-03-25
-  end_date: 2013-03-25
+  start_date: '2013-03-25'
+  end_date: '2013-03-25'
   priority: 5
   description: This is a dummy project for testing purposes, remove before release to the live server
 
 - id: 78527523754275832
   name: YAML Cool Data
-  start_date: 2013-03-25
-  end_date: 2013-03-25
+  start_date: '2013-03-25'
+  end_date: '2013-03-25'
   priority: 5
   description: This is a dummy project for testing purposes, remove before release to the live server
 
 - id: 754282357838532753
   name: YAML Cool Project
-  start_date: 2013-03-25
-  end_date: 2013-03-25
+  start_date: '2013-03-25'
+  end_date: '2013-03-25'
   priority: 5
   description: This is a dummy project for testing purposes, remove before release to the live server
 
 - id: 7825742827582378523
   name: YAML Cool App
-  start_date: 2013-03-25
-  end_date: 2013-03-25
+  start_date: '2013-03-25'
+  end_date: '2013-03-25'
   priority: 5
   description: This is a dummy project for testing purposes, remove before release to the live server
