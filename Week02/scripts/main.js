@@ -51,23 +51,20 @@ $(document).on('pageinit', '#pgHome', function(){
     });
 });
 
-// document ready shortcut
-$(function() {
-
-    // initialze create
-    $('#pgCreate').on('pageinit', function(){
-    });
-
-    // save project button clicked
-    $("#btnGoCreate").click(function() {
-        $('btnSave').text('Create');
-    });
-
+$(document).on('pageinit', '#pgCreate', function() {
     // create / save project clicked
     $('#btnSave').click(function() {
         saveProject();
 
         $('form').submit();
+    });
+});
+
+// document ready shortcut
+$(function() {
+    // save project button clicked
+    $("#btnGoCreate").click(function() {
+        $('btnSave').text('Create');
     });
 });
 
@@ -166,6 +163,10 @@ function closeLinkClicked() {
     return false;
 }
 
+/**
+ * Deletes the project from display and from localStorage
+ * @return {void} 
+ */
 function deleteLinkClicked() {
     var li = $(this).parent();
 
@@ -177,6 +178,10 @@ function deleteLinkClicked() {
     return false;
 }
 
+/**
+ * loads JSON data from remote server
+ * @return {void} 
+ */
 function loadJSON() {
     $.getJSON('data/projects.json', function() {
     })
@@ -196,6 +201,10 @@ function loadJSON() {
     });
 }
 
+/**
+ * Loads yaml data from remote server
+ * @return {void} 
+ */
 function loadYAML() {
     $.ajax({
         url: 'data/projects.yaml',
@@ -219,6 +228,10 @@ function loadYAML() {
     });
 }
 
+/**
+ * Resets the project list on page one and loads all projects
+ * @return {void} 
+ */
 function resetProjectList() {
     var projects = getAllProjects();
     var ul = $('#main_list');
