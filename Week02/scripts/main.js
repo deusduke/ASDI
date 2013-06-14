@@ -4,6 +4,9 @@
  * Week 02
  */
 
+var jsonLoaded = false;
+var yamlLoaded = false;
+
 lihtml = "<li class='' data-project-id='{0}'>{1}</li>";
 
 // document ready shortcut
@@ -42,7 +45,12 @@ function saveProject() {
  * @return {array} returns an array of project objects
  */
 function getAllProjects() {
-    for (var i=0; i < localStorage.length; ++i){
+    var allProjects = [];
+    
+    // pull all the data from storage
+    for (var key in localStorage){
+        var p = localStorage.getItem(key);
         
+        allProjects.push(p);
     }
 }
