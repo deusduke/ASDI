@@ -1,10 +1,10 @@
 /**
  * Deus Duke
  * ASDI 1306
- * Assignment Details
+ * Week 02
  */
 
-lihtml = "<li class='' data-project-id='{0}'>{1}</li>"
+lihtml = "<li class='' data-project-id='{0}'>{1}</li>";
 
 // document ready shortcut
 $(function() {
@@ -42,5 +42,7 @@ function saveProject() {
  * @return {array} returns an array of project objects
  */
 function getAllProjects() {
-
+    for (var i=0; i < localStorage.length; ++i){
+        
+    }
 }
