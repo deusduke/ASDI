@@ -1,0 +1,6 @@
+http://jsfiddle.net/
+http://api.jquery.com/
+http://view.jquerymobile.com/master/demos/
+http://www.datejs.com/
+
+These are some links that I used this week to help me out on my project.

@@ -3,7 +3,7 @@
 		"id": "9827398723498",
 		"name": "JSON Cool Game",
 		"start_date": "2013-03-25",
-		"end_date": "2013-03-25",
+		"due_date": "2013-03-25",
 		"priority": "5",
 		"description": "This is a dummy project for testing purposes, remove before release to the live server"
 	},
@@ -11,7 +11,7 @@
 		"id": "63371573851863",
 		"name": "JSON Cool Test",
 		"start_date": "2013-03-25",
-		"end_date": "2013-03-25",
+		"due_date": "2013-03-25",
 		"priority": "5",
 		"description": "This is a dummy project for testing purposes, remove before release to the live server"
 	},
@@ -19,7 +19,7 @@
 		"id": "718671317637",
 		"name": "JSON Cool Data",
 		"start_date": "2013-03-25",
-		"end_date": "2013-03-25",
+		"due_date": "2013-03-25",
 		"priority": "5",
 		"description": "This is a dummy project for testing purposes, remove before release to the live server"
 	},
@@ -27,7 +27,7 @@
 		"id": "176371247",
 		"name": "JSON Cool Project",
 		"start_date": "2013-03-25",
-		"end_date": "2013-03-25",
+		"due_date": "2013-03-25",
 		"priority": "5",
 		"description": "This is a dummy project for testing purposes, remove before release to the live server"
 	},
@@ -35,7 +35,7 @@
 		"id": "176531783863",
 		"name": "JSON Cool App",
 		"start_date": "2013-03-25",
-		"end_date": "2013-03-25",
+		"due_date": "2013-03-25",
 		"priority": "5",
 		"description": "This is a dummy project for testing purposes, remove before release to the live server"
 	}
