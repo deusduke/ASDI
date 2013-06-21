@@ -1,7 +1,7 @@
 /**
  * Deus Duke
  * ASDI 1306
- * Week 02
+ * Week 03
  */
 
 var currentProject = null;

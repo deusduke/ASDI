@@ -1,29 +1,139 @@
+<!--
+	Author: Deus Duke
+	Term: ASDI 1306
+	Assignment Details: Week 03 Project
+-->
+
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>My New CouchApp</title>
-    <link rel="stylesheet" href="css/main.css" type="text/css">
-  </head>
-  <body>
-    <div id="account"></div>
+<head>
+	<meta charset="UTF-8">
 
-    <h1>Generated CouchApp</h1>
+	<link rel="stylesheet" href="css/jquery.mobile-1.3.1.min.css">
+	<link rel="stylesheet" href="css/main.css">
 
-    <div id="profile"></div>
-    <div id="items"></div>
+	<script src="scripts/jquery-1.10.1.min.js"></script>
+	<script src="scripts/jquery.mobile-1.3.1.min.js"></script>
+	<script src="scripts/js-yaml.js"></script>
+	<script src="scripts/date.js"></script>
+	<script src="scripts/main.js"></script>
 
-    <div id="sidebar">
-      <p>Edit welcome message.</p>
-      <p>Ideas: You could easily turn this into a photo sharing app, or a grocery list, or a chat room.</p>
-    </div>
-  </body>
-  <script src="vendor/couchapp/loader.js"></script>
-  <script type="text/javascript" charset="utf-8">
-    $.couch.app(function(app) {
-      $("#account").evently("account", app);
-      $("#profile").evently("profile", app);
-      $.evently.connect("#account","#profile", ["loggedIn","loggedOut"]);
-      $("#items").evently("items", app);
-    });
-  </script>
+	<title>Project Tracker</title>
+</head>
+<body>
+	<section id="pgHome" data-role="page">
+		<header data-role="header">
+			<h1>Project Tracker</h1>
+		</header>
+		<header data-role="header">
+			<div>
+				<a href="#" onclick="loadJSON()" data-role="button">Load JSON</a>
+				<a href="#" onclick="loadYAML()" data-role="button">Load YAML</a>
+			</div>
+		</header>
+		
+		<div data-role="content">
+			<ul id="main_list" data-role="listview">
+			</ul>
+		</div>
+
+		<footer data-role="footer" data-position="fixed">
+			<nav data-role="navbar">
+				<ul>
+					<li>
+						<a href="#" data-role="button">Home</a>
+					</li>
+					<li>
+						<a id="btnGoCreate" href="#pgCreate" data-role="button">Create / Edit</a>
+					</li>
+					<li>
+						<a href="#pgAbout" data-role="button">About</a>
+					</li>
+				</ul>
+			</nav>
+		</footer>
+	</section>
+
+	<section id="pgCreate" data-role="page">
+		<header data-role="header">
+			<h1>Project Tracker</h1>
+		</header>
+		
+		<div data-role="content">
+			<form action="" method="post">
+				<label for="name">Project Name*</label>
+				<input id="name" type="text" placeholder="Enter Project Name">
+
+				<label for="start_date">Start Date</label>
+				<input type="date" id="start_date">
+				
+				<label for="end_date">Due Date</label>
+				<input type="date" id="end_date">
+
+				<label for="priority">Priority</label>
+				<input type="range" id="priority" value="3" min="1" max="5">
+
+				<label for="description">Project Description</label>
+				<textarea id="description" placeholder="Enter a Project Description"></textarea>
+
+				<br>
+				<br>
+
+				<a href="#pgHome" data-role="button">Cancel</a>
+				<input id="btnSave" type="button" value="Create" data-role="button">
+			</form>
+		</div>
+
+		<footer data-role="footer" data-position="fixed">
+			<nav data-role="navbar">
+				<ul>
+					<li>
+						<a href="#pgHome" data-role="button">Home</a>
+					</li>
+					<li>
+						<a id="btnGoCreate" href="#" data-role="button">Create / Edit</a>
+					</li>
+					<li>
+						<a href="#pgAbout" data-role="button">About</a>
+					</li>
+				</ul>
+			</nav>
+		</footer>
+	</section>
+
+	<section id="pgAbout" data-role="page">
+		<header data-role="header">
+			<h1>Project Tracker</h1>
+		</header>
+		
+		<div data-role="content">
+			<h3>About</h3>
+            
+            <p>
+                Welcome to Project Tracker. 
+                This app is intended to help with the tracking of project for 
+                small teams and businesses. For more information or assistance
+                please contact 
+                <a>deusduke@fullsail.edu</a>.
+            </p>
+		</div>
+
+		<footer data-role="footer" data-position="fixed">
+			<nav data-role="navbar">
+				<ul>
+					<li>
+						<a href="#pgHome" data-role="button">Home</a>
+					</li>
+					<li>
+						<a id="btnGoCreate" href="#pgCreate" data-role="button">Create / Edit</a>
+					</li>
+					<li>
+						<a href="#" data-role="button">About</a>
+					</li>
+				</ul>
+			</nav>
+		</footer>
+	</section>
+	
+</body>
 </html>
