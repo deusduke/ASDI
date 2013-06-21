@@ -208,7 +208,7 @@ function editLinkClicked() {
  * @return {void} 
  */
 function loadJSON() {
-    $.getJSON('_view/projects', function() {
+    $.getJSON('/project_tracker/_design/project_tracker/_view/projects', function() {
     })
     .done(function(data){
         console.log(data);
