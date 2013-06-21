@@ -5,6 +5,7 @@
  */
 
 var currentProject = null;
+var data = [];
 
 // utility function to create formatted string similar to .Net
 String.prototype.format = function() {
@@ -105,7 +106,7 @@ function saveProject(projectid) {
     // get vars
     p.name = $('#name').val();
     p.start_date = $('#start_date').val();
-    p.end_date = $('#end_date').val();
+    p.due_date = $('#end_date').val();
     p.priority = $('#priority').val();
     p.description = $('#description').val();
 
@@ -192,7 +193,7 @@ function editLinkClicked() {
 
     $('#name').val(p.name);
     $('#start_date').val(p.start_date);
-    $('#end_date').val(p.end_date);
+    $('#end_date').val(p.due_date);
     $('#priority').val(p.priority);
     $('#description').val(p.description);
 
@@ -207,41 +208,18 @@ function editLinkClicked() {
  * @return {void} 
  */
 function loadJSON() {
-    $.getJSON('data/projects.json', function() {
+    $.getJSON('_view/projects', function() {
     })
     .done(function(data){
         console.log(data);
-        for (var i in data) {
-            var p = data[i];
-            localStorage.setItem(p.id, JSON.stringify(p));
-        }
-
-        resetProjectList();
-    })
-    .fail(function(jqXHR, textStatus){
-        console.log(jqXHR);
-        console.log(textStatus);
-        console.log('could not load data');
-    });
-}
-
-/**
- * Loads yaml data from remote server
- * @return {void} 
- */
-function loadYAML() {
-    $.ajax({
-        url: 'data/projects.yaml',
-        dataType: 'text'
-    })
-    .done(function(data){
-        console.log(data);
-        projects = jsyaml.load(data);
-
-        for (var i in projects) {
-            var p = projects[i];
-            localStorage.setItem(p.id, JSON.stringify(p));
-        }
+        // clear local storage
+        localStorage.clear();
+        
+        // now load data back in
+        $.each(data.rows, function(index, item){
+        	var p = item.value;
+        	localStorage.setItem(p.id, JSON.stringify(p));
+        });
 
         resetProjectList();
     })
@@ -276,7 +254,7 @@ function resetProjectList() {
         if (!li.hasClass('expand')) {
             li.addClass('expand');
             var p = getProject(li.attr('data-project-id'));
-            var newdom = $(li_expanded.format(p.name, p.description, p.start_date, p.end_date, p.priority));
+            var newdom = $(li_expanded.format(p.name, p.description, p.start_date, p.due_date, p.priority));
             li.html(newdom);
 
             $('.close_link').click(closeLinkClicked);
