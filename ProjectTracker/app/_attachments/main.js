@@ -1,7 +1,7 @@
 /**
  * Deus Duke
  * ASDI 1306
- * Week 03
+ * Week 04
  */
 
 var currentProject = null;
@@ -45,7 +45,7 @@ li_expanded = " \
 
 // initialize home
 $(document).on('pageinit', '#pgHome', function(){
-    resetProjectList();
+    loadJSON();
 
     // handle the clicking of the edit a for
     // editing a project
@@ -208,26 +208,47 @@ function editLinkClicked() {
  * @return {void} 
  */
 function loadJSON() {
-    $.getJSON('/project_tracker/_design/project_tracker/_view/projects', function() {
-    })
-    .done(function(data){
-        console.log(data);
-        // clear local storage
-        localStorage.clear();
-        
-        // now load data back in
-        $.each(data.rows, function(index, item){
-        	var p = item.value;
-        	localStorage.setItem(p.id, JSON.stringify(p));
-        });
-
-        resetProjectList();
-    })
-    .fail(function(jqXHR, textStatus){
-        console.log(jqXHR);
-        console.log(textStatus);
-        console.log('could not load data');
-    });
+	$.couch.db('project_tracker').view("project_tracker/projects", {
+		success: function(data) {
+			console.log(data);
+	        // clear local storage
+	        localStorage.clear();
+	        
+	        // now load data back in
+	        if (data && data.rows && data.rows.length > 0){
+		        $.each(data.rows, function(index, item){
+		        	var p = item.value;
+		        	localStorage.setItem(p.id, JSON.stringify(p));
+		        });
+	        }
+	        
+	        resetProjectList();
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			console.log(jqXHR);
+	        console.log(textStatus);
+	        console.log('could not load data');
+		}
+	});
+	
+//    $.getJSON('/project_tracker/_design/project_tracker/_view/projects', function() {
+//    })
+//    .done(function(data){
+//        console.log(data);
+//        // clear local storage
+//        localStorage.clear();
+//        
+//        // now load data back in
+//        $.each(data.rows, function(index, item){
+//        	var p = item.value;
+//        	localStorage.setItem(p.id, JSON.stringify(p));
+//        });
+//
+//        resetProjectList();
+//    })
+//    .fail(function(jqXHR, textStatus){
+//        
+//    });
 }
 
 /**
