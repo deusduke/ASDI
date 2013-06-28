@@ -29,19 +29,7 @@ var jsonLoaded = false;
 var yamlLoaded = false;
 var createMode = false;
 
-lihtml = "<li class='project_li' data-project-id='{0}'><p>{1}</p></li>";
-
-// this is used to expand the list view on click
-li_expanded = " \
-<p>{0}</p> \
-<p>{1}</p> \
-<p>{2}</p> \
-<p>{3}</p> \
-<p>{4}</p> \
-<a href='#' class='edit_link'>Edit</a> \
-<a href='#' class='close_link'>Close</a> \
-<a href='#' class='delete_link'>Delete</a> \
-";
+lihtml = "<li class='project_li' data-project-id='{0}'>{1}</li>";
 
 // initialize home
 $(document).on('pageinit', '#pgHome', function(){
@@ -62,6 +50,10 @@ $(document).on('pageinit', '#pgCreate', function() {
         resetProjectList();
         $('form').submit();
     });
+});
+
+$(document).on('pageinit', '#pgView', function() {
+    updateView(currentProject);
 });
 
 // document ready shortcut
@@ -114,12 +106,31 @@ function saveProject(projectid) {
 }
 
 /**
- * Get a project baseed off the id
+ * View a project based off the id
  * @param  {string/int} projectid
  * @return {void}
  */
-function getProject(projectid) {
-    return JSON.parse(localStorage.getItem(projectid));
+function viewProject(projectid) {
+	$.couch.db('project_tracker').openDoc('project_' + projectid, {
+		success: function(data) {
+			var p = data;
+			p.id = projectid;
+			
+			console.log(p);
+			currentProject = p;
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			console.log(jqXHR);
+	        console.log(textStatus);
+	        console.log('could not load data');
+		}
+	});
+			
+    $.mobile.changePage("view.html");
+}
+
+function getItemFromLocalStorage(projectid) {
+	return JSON.parse(localStorage.getItem(projectid));
 }
 
 /**
@@ -131,7 +142,7 @@ function getAllProjects() {
 
     // pull all the data from storage
     for (var key in localStorage){
-        var p = getProject(key);
+        var p = getItemFromLocalStorage(key);
 
         allProjects.push(p);
     }
@@ -147,21 +158,6 @@ function getAllProjects() {
  */
 function deleteProject(projectid) {
     localStorage.removeItem(projectid);
-}
-
-function closeLinkClicked() {
-    var li = $(this).parent();
-
-    // make sure that we are expanded
-    if (li.hasClass('expand')) {
-        li.removeClass('expand');
-
-        // get project and set li html back to text
-        var p = getProject(li.attr('data-project-id'));
-        li.html('<p>' + p.name + '</p>');
-    }
-
-    return false;
 }
 
 /**
@@ -185,11 +181,9 @@ function deleteLinkClicked() {
  */
 function editLinkClicked() {
     var li = $(this).parent();
-
-    currentProject = li.attr('data-project-id');
-
-    // set fields
-    project = getProject(currentProject);
+    var p = currentProject;
+    
+    $.mobile.changePage('create.html');
 
     $('#name').val(p.name);
     $('#start_date').val(p.start_date);
@@ -198,7 +192,6 @@ function editLinkClicked() {
     $('#description').val(p.description);
 
     $('#btnSave').text('Save');
-    $.mobile.changePage('#pgCreate');
 
     return false;
 }
@@ -230,25 +223,6 @@ function loadJSON() {
 	        console.log('could not load data');
 		}
 	});
-	
-//    $.getJSON('/project_tracker/_design/project_tracker/_view/projects', function() {
-//    })
-//    .done(function(data){
-//        console.log(data);
-//        // clear local storage
-//        localStorage.clear();
-//        
-//        // now load data back in
-//        $.each(data.rows, function(index, item){
-//        	var p = item.value;
-//        	localStorage.setItem(p.id, JSON.stringify(p));
-//        });
-//
-//        resetProjectList();
-//    })
-//    .fail(function(jqXHR, textStatus){
-//        
-//    });
 }
 
 /**
@@ -270,23 +244,29 @@ function resetProjectList() {
     // expand list item on click
     $('.project_li').click(function(){
         var li = $(this);
-
-        // make sure we are not expanded
-        if (!li.hasClass('expand')) {
-            li.addClass('expand');
-            var p = getProject(li.attr('data-project-id'));
-            var newdom = $(li_expanded.format(p.name, p.description, p.start_date, p.due_date, p.priority));
-            li.html(newdom);
-
-            $('.close_link').click(closeLinkClicked);
-            $('.delete_link').click(deleteLinkClicked);
-            $('.edit_link').click(editLinkClicked);
-        }
+        
+        viewProject(li.attr('data-project-id'));
 
         return false;
     });
-
+    
     ul.listview('refresh');
+}
+
+/**
+ * Updates the view by retrieving the given project
+ * @param  {object} The project object
+ * @return {void}     
+ */
+function updateView(p) {
+	$('#lb_project_name').text(p.name);
+    $('#lb_project_description').text(p.description);
+    $('#lb_project_start_date').text(p.start_date);
+    $('#lb_project_due_date').text(p.end_date);
+    $('#lb_project_priority').text(p.priority);
+
+    $('.delete_link').click(deleteLinkClicked);
+    $('.edit_link').click(editLinkClicked);
 }
 
 /**

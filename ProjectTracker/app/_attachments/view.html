@@ -22,16 +22,27 @@
 	<title>Project Tracker</title>
 </head>
 <body>
-	<section id="pgHome" data-role="page">
+	<section id="pgView" data-role="page">
 		<header data-role="header">
+			<a href="#pgHome" data-icon="arrow-l">Back</a>
 			<h1>Project Tracker</h1>
 		</header>
 		
 		<div data-role="content">
-			<ul id="main_list" data-role="listview">
-			</ul>
+			<span>Project Name:</span> <br>
+			<p id="lb_project_name"></p>
+			<span>Description:</span> <br>
+			<p id="lb_project_description"></p>
+			<span>Start Date:</span> <br>
+			<p id="lb_project_start_date"></p>
+			<span>Due Date:</span> <br>
+			<p id="lb_project_due_date"></p>
+			<span>Priority:</span> <br>
+			<p id="lb_project_priority"></p>
+			<a id="link_edit" href='#' class='edit_link'>Edit</a>
+			<a id="link_delete" href='#' class='delete_link'>Delete</a>
 		</div>
-
+	
 		<footer data-role="footer" data-position="fixed">
 			<nav data-role="navbar">
 				<ul>

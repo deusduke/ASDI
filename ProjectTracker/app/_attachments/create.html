@@ -22,24 +22,44 @@
 	<title>Project Tracker</title>
 </head>
 <body>
-	<section id="pgHome" data-role="page">
+	<section id="pgCreate" data-role="page">
 		<header data-role="header">
 			<h1>Project Tracker</h1>
 		</header>
 		
 		<div data-role="content">
-			<ul id="main_list" data-role="listview">
-			</ul>
+			<form action="" method="post">
+				<label for="name">Project Name*</label>
+				<input id="name" type="text" placeholder="Enter Project Name">
+	
+				<label for="start_date">Start Date</label>
+				<input type="date" id="start_date">
+				
+				<label for="end_date">Due Date</label>
+				<input type="date" id="end_date">
+	
+				<label for="priority">Priority</label>
+				<input type="range" id="priority" value="3" min="1" max="5">
+	
+				<label for="description">Project Description</label>
+				<textarea id="description" placeholder="Enter a Project Description"></textarea>
+	
+				<br>
+				<br>
+	
+				<a href="#pgHome" data-role="button">Cancel</a>
+				<input id="btnSave" type="button" value="Create" data-role="button">
+			</form>
 		</div>
-
+	
 		<footer data-role="footer" data-position="fixed">
 			<nav data-role="navbar">
 				<ul>
 					<li>
-						<a href="#" data-role="button">Home</a>
+						<a href="index.html" data-role="button">Home</a>
 					</li>
 					<li>
-						<a id="btnGoCreate" href="create.html" data-role="button">Create / Edit</a>
+						<a id="btnGoCreate" href="#" data-role="button">Create / Edit</a>
 					</li>
 					<li>
 						<a href="about.html" data-role="button">About</a>
