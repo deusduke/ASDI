@@ -47,8 +47,11 @@ $(document).on('pageinit', '#pgCreate', function() {
     $('#btnSave').click(function() {
         saveProject(currentProject);
 
-        resetProjectList();
-        $('form').submit();
+        //resetProjectList();
+        //$('form').submit();
+        localStorage.clear();
+        loadJSON();
+        $.mobile.changePage('index.html');
     });
 
     if (currentProject != null) {
@@ -61,8 +64,6 @@ $(document).on('pageinit', '#pgCreate', function() {
 	    $('#description').val(p.description);
 	
 	    $('#btnSave').val('Save');
-	    
-	    currentProject = null;
     }
 });
 
@@ -77,7 +78,7 @@ $(function() {
         currentProject = null;
         $('btnSave').text('Create');
 
-        clearForm();
+        clearForm();        
     });
 });
 
@@ -96,18 +97,19 @@ function validateForm() {
 /**
  * Use this to save or update an existing project
  */
-function saveProject(projectid) {
+function saveProject(project) {
 
     // make sure all data is valid, if not return
     if (!validateForm()) return;
 
-    var p = {};
-
-    // create or store the id
-    if (projectid)
-        p.id = projectid;
-    else
-        p.id = Date.now().getTime();    // create id based off timestamp for guaranteed uniqueness
+    var p = project;
+    
+    if (p)
+    	p._id = "project_" + p.id;
+    else {
+    	p = {};
+    	p._id = "project_" + $.couch.newUUID();
+    }
 
     // get vars
     p.name = $('#name').val();
@@ -115,8 +117,15 @@ function saveProject(projectid) {
     p.due_date = $('#end_date').val();
     p.priority = $('#priority').val();
     p.description = $('#description').val();
-
-    localStorage.setItem(p.id, JSON.stringify(p));
+    
+    $.couch.db("project_tracker").saveDoc(p, {
+        success: function(data) {
+            console.log(data);
+        },
+        error: function(status) {
+            console.log(status);
+        }
+    });
 }
 
 /**
