@@ -50,6 +50,20 @@ $(document).on('pageinit', '#pgCreate', function() {
         resetProjectList();
         $('form').submit();
     });
+
+    if (currentProject != null) {
+    	var p = currentProject;
+    	
+	    $('#name').val(p.name);
+	    $('#start_date').val(p.start_date);
+	    $('#end_date').val(p.due_date);
+	    $('#priority').val(p.priority);
+	    $('#description').val(p.description);
+	
+	    $('#btnSave').val('Save');
+	    
+	    currentProject = null;
+    }
 });
 
 $(document).on('pageinit', '#pgView', function() {
@@ -156,8 +170,13 @@ function getAllProjects() {
  * @param  {int/string} projectid
  * @return {void}
  */
-function deleteProject(projectid) {
-    localStorage.removeItem(projectid);
+function deleteCurrentProject() {
+	$.couch.db("project_tracker").removeDoc(currentProject, {
+		success: function() {
+			loadJSON();
+			$.mobile.changePage("index.html");
+		}
+	});
 }
 
 /**
@@ -168,9 +187,6 @@ function deleteLinkClicked() {
     var li = $(this).parent();
 
     deleteProject(li.attr('data-project-id'));
-    li.remove();
-
-    $('#main_list').listview('refresh');
 
     return false;
 }
@@ -181,17 +197,8 @@ function deleteLinkClicked() {
  */
 function editLinkClicked() {
     var li = $(this).parent();
-    var p = currentProject;
-    
+
     $.mobile.changePage('create.html');
-
-    $('#name').val(p.name);
-    $('#start_date').val(p.start_date);
-    $('#end_date').val(p.due_date);
-    $('#priority').val(p.priority);
-    $('#description').val(p.description);
-
-    $('#btnSave').text('Save');
 
     return false;
 }
@@ -265,7 +272,7 @@ function updateView(p) {
     $('#lb_project_due_date').text(p.end_date);
     $('#lb_project_priority').text(p.priority);
 
-    $('.delete_link').click(deleteLinkClicked);
+    // $('.delete_link').click(deleteLinkClicked);
     $('.edit_link').click(editLinkClicked);
 }
 
